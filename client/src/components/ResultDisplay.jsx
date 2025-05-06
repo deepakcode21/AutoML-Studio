@@ -23,7 +23,7 @@ const ResultsDisplay = ({ results }) => {
               ))}
             </tbody>
           </table>
-        </>
+        </>    
       )}
 
       {results.feature_importances && (

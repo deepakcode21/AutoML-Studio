@@ -1,19 +1,27 @@
 import React from 'react';
 
-const DataPreview = ({ columns, previewData }) => {
-  if (!previewData || !Array.isArray(previewData) || !previewData.length) return null;
+const DataPreview = ({ previewData, columns }) => {
+  if (!previewData || previewData.length === 0) {
+    return <div>No data to preview</div>;
+  }
 
   return (
     <div>
-      <h3>Data Preview (first 5 rows)</h3>
-      <table border="1" style={{ borderCollapse: 'collapse', width: '100%' }}>
+      <h2>Data Preview</h2>
+      <table border="1">
         <thead>
-          <tr>{columns.map(col => <th key={col}>{col}</th>)}</tr>
+          <tr>
+            {columns.map((col, idx) => (
+              <th key={idx}>{col}</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
-          {previewData.map((row, idx) => (
-            <tr key={idx}>
-              {columns.map(col => <td key={col}>{row[col]}</td>)}
+          {previewData.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((col, colIndex) => (
+                <td key={colIndex}>{row[col]}</td>
+              ))}
             </tr>
           ))}
         </tbody>

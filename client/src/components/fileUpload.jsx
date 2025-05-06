@@ -10,12 +10,13 @@ const FileUpload = ({ setCsvFile, setPreviewData, setColumns }) => {
       reader.onload = (evt) => {
         const text = evt.target.result;
         Papa.parse(text, {
-          header: true,
+          header: true, // ✅ Uses first row as headers
           skipEmptyLines: true,
           complete: (results) => {
             const data = results.data;
             setColumns(results.meta.fields || []);
-            setPreviewData(data.slice(0, 5));
+            console.log("data ", data);
+            setPreviewData(data[0]); // ✅ First 5 rows
           }
         });
       };
