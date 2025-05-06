@@ -1,8 +1,10 @@
+
+
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sklearn.model_selection import train_test_split
-from app.routes import data_routes  
+from app.routes import data_routes
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -24,6 +26,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app.include_router(data_routes.router)
 
 @app.post("/train")
@@ -42,7 +45,7 @@ async def train_model(
         # Drop constant columns
         df = df.loc[:, df.apply(pd.Series.nunique) > 1]
 
-        # Drop high-cardinality text columns (like names/IDs)
+        # Drop high-cardinality text columns
         for col in df.select_dtypes(include='object').columns:
             if df[col].nunique() > 50:
                 df.drop(columns=[col], inplace=True)
@@ -59,26 +62,34 @@ async def train_model(
                 elif missing == "zero":
                     df[col].fillna(0, inplace=True)
 
-        # Encoding categorical
+        # Label encoding
+        # Save target column name
+        target_col = df.columns[-1]
+
+        # One-Hot or Label Encoding
         if encoding == "label":
             for col in df.select_dtypes(include='object').columns:
                 df[col] = LabelEncoder().fit_transform(df[col])
+        elif encoding == "onehot":
+            df = pd.get_dummies(df, drop_first=True)
 
-        # Feature/target split
-        X = df.iloc[:, :-1]
-        y = df.iloc[:, -1]
+        # Split features and target after encoding
+        X = df.drop(columns=[target_col])
+        y = df[target_col]
 
-        # Scale data
-        scaled_df = X.copy()
+
+        feature_names = df.columns[:-1]
+
+        # Scale features
         if scaler == "standard":
-            scaled_df = pd.DataFrame(StandardScaler().fit_transform(X), columns=X.columns)
+            X = StandardScaler().fit_transform(X)
         elif scaler == "minmax":
-            scaled_df = pd.DataFrame(MinMaxScaler().fit_transform(X), columns=X.columns)
+            X = MinMaxScaler().fit_transform(X)
         elif scaler == "robust":
-            scaled_df = pd.DataFrame(RobustScaler().fit_transform(X), columns=X.columns)
+            X = RobustScaler().fit_transform(X)
 
-        # Train-test split
-        X_train, X_test, y_train, y_test = train_test_split(scaled_df, y, test_size=(1 - splitRatio), random_state=42)
+        # Train/test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=(1 - splitRatio), random_state=42)
 
         # Model selection
         model_map = {
@@ -89,36 +100,52 @@ async def train_model(
         selected_model = model_map.get(model, LinearRegression())
         selected_model.fit(X_train, y_train)
 
-        # Predictions and metrics
+        # Predictions
         y_pred = selected_model.predict(X_test)
+
+        # Metrics
         rmse = np.sqrt(mean_squared_error(y_test, y_pred))
         r2 = r2_score(y_test, y_pred)
         mae = mean_absolute_error(y_test, y_pred)
 
-        # Feature importance or coefficients
-        def get_plot(model, columns):
+        # Visualization (feature importance or coefficients)
+        def get_visualization_plot(model, columns, model_name):
             plt.figure(figsize=(8, 6))
-
-            if hasattr(model, "feature_importances_"):
-                importances = model.feature_importances_
-                title = "Feature Importance"
-            elif hasattr(model, "coef_"):
-                importances = np.abs(model.coef_)
-                title = "Coefficient Magnitude (Pseudo Importance)"
+            if model_name in ["RandomForest", "DecisionTree"] and hasattr(model, "feature_importances_"):
+                plt.barh(columns, model.feature_importances_)
+                plt.xlabel("Importance")
+                plt.title("Feature Importance")
+            elif model_name == "LinearRegression" and hasattr(model, "coef_"):
+                plt.barh(columns, model.coef_)
+                plt.xlabel("Coefficient Value")
+                plt.title("Linear Regression Coefficients")
             else:
                 return None
 
-            plt.barh(columns, importances)
-            plt.xlabel("Importance")
-            plt.title(title)
-            plt.tight_layout()
             buf = io.BytesIO()
+            plt.tight_layout()
             plt.savefig(buf, format="png")
             plt.close()
             buf.seek(0)
             return base64.b64encode(buf.read()).decode("utf-8")
 
-        plot = get_plot(selected_model, scaled_df.columns)
+        def get_prediction_plot(y_true, y_pred):
+            plt.figure(figsize=(8, 5))
+            y_true = y_true.values if hasattr(y_true, "values") else y_true
+            plt.plot(y_true, label="Actual", marker='o')
+            plt.plot(y_pred, label="Predicted", marker='x')
+            plt.title("Actual vs Predicted")
+            plt.xlabel("Sample")
+            plt.ylabel("Value")
+            plt.legend()
+            buf = io.BytesIO()
+            plt.tight_layout()
+            plt.savefig(buf, format="png")
+            plt.close()
+            buf.seek(0)
+            return base64.b64encode(buf.read()).decode("utf-8")
+
+        table_data = pd.DataFrame(X, columns=feature_names).head(5).to_dict(orient="records")
 
         return JSONResponse(content={
             "metrics": {
@@ -126,9 +153,10 @@ async def train_model(
                 "r2": r2,
                 "mae": mae
             },
-            "visualization": plot,
-            "columns": list(scaled_df.columns),
-            "rows": scaled_df.head(5).to_dict(orient="records")
+            "visualization": get_visualization_plot(selected_model, feature_names, model),
+            "prediction_plot": get_prediction_plot(y_test, y_pred),
+            "columns": list(feature_names),
+            "rows": table_data
         })
 
     except Exception as e:

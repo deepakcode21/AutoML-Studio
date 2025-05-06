@@ -1,4 +1,3 @@
-// Result.jsx
 import React, { useEffect, useState } from 'react';
 
 function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
@@ -50,7 +49,7 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
     return <p>Loading or waiting for file...</p>;
   }
 
-  const { metrics, visualization, columns, rows } = response;
+  const { metrics, visualization, prediction_plot, columns, rows } = response;
 
   return (
     <div style={{ padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
@@ -66,6 +65,7 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
         <p>No performance metrics found.</p>
       )}
 
+      {/* Feature Importance */}
       {visualization && (
         <div>
           <h4>Feature Importance</h4>
@@ -77,6 +77,19 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
         </div>
       )}
 
+      {/* Actual vs Predicted */}
+      {prediction_plot && (
+        <div>
+          <h4>Actual vs Predicted</h4>
+          <img
+            src={`data:image/png;base64,${prediction_plot}`}
+            alt="Actual vs Predicted"
+            style={{ maxWidth: '100%', marginTop: '1rem' }}
+          />
+        </div>
+      )}
+
+      {/* Scaled Table */}
       {columns && rows ? (
         <div>
           <h4>Sample Scaled Data</h4>
@@ -92,7 +105,9 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
               {rows.map((row, i) => (
                 <tr key={i}>
                   {columns.map((col, j) => (
-                    <td key={j}>{isNaN(Number(row[col])) ? '-' : Number(row[col]).toFixed(3)}</td>
+                    <td key={j}>
+                      {isNaN(Number(row[col])) ? '-' : Number(row[col]).toFixed(3)}
+                    </td>
                   ))}
                 </tr>
               ))}
