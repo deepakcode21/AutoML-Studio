@@ -69,15 +69,16 @@ async def train_model(
         y = df.iloc[:, -1]
 
         # Scale data
+        scaled_df = X.copy()
         if scaler == "standard":
-            X = StandardScaler().fit_transform(X)
+            scaled_df = pd.DataFrame(StandardScaler().fit_transform(X), columns=X.columns)
         elif scaler == "minmax":
-            X = MinMaxScaler().fit_transform(X)
+            scaled_df = pd.DataFrame(MinMaxScaler().fit_transform(X), columns=X.columns)
         elif scaler == "robust":
-            X = RobustScaler().fit_transform(X)
+            scaled_df = pd.DataFrame(RobustScaler().fit_transform(X), columns=X.columns)
 
         # Train-test split
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=(1 - splitRatio), random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(scaled_df, y, test_size=(1 - splitRatio), random_state=42)
 
         # Model selection
         model_map = {
@@ -94,22 +95,30 @@ async def train_model(
         r2 = r2_score(y_test, y_pred)
         mae = mean_absolute_error(y_test, y_pred)
 
-        # Feature importance plot (only for tree-based models)
+        # Feature importance or coefficients
         def get_plot(model, columns):
-            if hasattr(model, "feature_importances_"):
-                plt.figure(figsize=(8, 6))
-                plt.barh(columns, model.feature_importances_)
-                plt.xlabel("Importance")
-                plt.title("Feature Importance")
-                buf = io.BytesIO()
-                plt.savefig(buf, format="png")
-                plt.close()
-                buf.seek(0)
-                return base64.b64encode(buf.read()).decode("utf-8")
-            return None
+            plt.figure(figsize=(8, 6))
 
-        feature_names = df.columns[:-1]
-        plot = get_plot(selected_model, feature_names)
+            if hasattr(model, "feature_importances_"):
+                importances = model.feature_importances_
+                title = "Feature Importance"
+            elif hasattr(model, "coef_"):
+                importances = np.abs(model.coef_)
+                title = "Coefficient Magnitude (Pseudo Importance)"
+            else:
+                return None
+
+            plt.barh(columns, importances)
+            plt.xlabel("Importance")
+            plt.title(title)
+            plt.tight_layout()
+            buf = io.BytesIO()
+            plt.savefig(buf, format="png")
+            plt.close()
+            buf.seek(0)
+            return base64.b64encode(buf.read()).decode("utf-8")
+
+        plot = get_plot(selected_model, scaled_df.columns)
 
         return JSONResponse(content={
             "metrics": {
@@ -118,9 +127,10 @@ async def train_model(
                 "mae": mae
             },
             "visualization": plot,
-            "columns": list(feature_names),
-            "rows": pd.DataFrame(X).head(5).tolist()
+            "columns": list(scaled_df.columns),
+            "rows": scaled_df.head(5).to_dict(orient="records")
         })
+
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 

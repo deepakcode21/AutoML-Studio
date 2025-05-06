@@ -23,7 +23,7 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
       formData.append('splitRatio', splitRatio);
 
       try {
-        const res = await fetch('http://localhost:8000/preprocess', {
+        const res = await fetch('http://localhost:8000/train', {
           method: 'POST',
           body: formData,
         });
@@ -92,7 +92,7 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
               {rows.map((row, i) => (
                 <tr key={i}>
                   {columns.map((col, j) => (
-                    <td key={j}>{Number(row[col])?.toFixed(3)}</td>
+                    <td key={j}>{isNaN(Number(row[col])) ? '-' : Number(row[col]).toFixed(3)}</td>
                   ))}
                 </tr>
               ))}
