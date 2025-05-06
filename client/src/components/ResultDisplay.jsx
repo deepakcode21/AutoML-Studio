@@ -1,11 +1,11 @@
+// Result.jsx
 import React, { useEffect, useState } from 'react';
 
 function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
-  // Debug props
-  console.log('Props in Result:', { csv, model, scaler, splitRatio, missing, encoding });
+  console.log('Props in response:', { csv, model, scaler, splitRatio, missing, encoding });
 
   useEffect(() => {
     const sendRequest = async () => {
@@ -19,6 +19,8 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
       formData.append('missing', missing);
       formData.append('encoding', encoding);
       formData.append('scaler', scaler);
+      formData.append('model', model);
+      formData.append('splitRatio', splitRatio);
 
       try {
         const res = await fetch('http://localhost:8000/preprocess', {
@@ -40,30 +42,65 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
     sendRequest();
   }, [csv, model, scaler, splitRatio, missing, encoding]);
 
+  if (error) {
+    return <p style={{ color: 'red' }}>Error: {error}</p>;
+  }
+
+  if (!response) {
+    return <p>Loading or waiting for file...</p>;
+  }
+
+  const { metrics, visualization, columns, rows } = response;
+
   return (
     <div style={{ padding: '1rem', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h3>Result Component</h3>
+      <h3>Model Performance</h3>
 
-      <p><strong>Model:</strong> {model}</p>
-      <p><strong>Scaler:</strong> {scaler}</p>
-      <p><strong>Split Ratio:</strong> {splitRatio}</p>
-      <p><strong>Missing Strategy:</strong> {missing}</p>
-      <p><strong>Encoding:</strong> {encoding}</p>
-      <p><strong>CSV File:</strong> {csv ? csv.name : 'No file selected'}</p>
+      {metrics ? (
+        <ul>
+          <li><strong>RMSE:</strong> {metrics.rmse?.toFixed(4)}</li>
+          <li><strong>R²:</strong> {metrics.r2?.toFixed(4)}</li>
+          <li><strong>MAE:</strong> {metrics.mae?.toFixed(4)}</li>
+        </ul>
+      ) : (
+        <p>No performance metrics found.</p>
+      )}
 
-      <hr />
-
-      {response && (
+      {visualization && (
         <div>
-          <h4>Response from Backend:</h4>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
+          <h4>Feature Importance</h4>
+          <img
+            src={`data:image/png;base64,${visualization}`}
+            alt="Feature Importance"
+            style={{ maxWidth: '100%' }}
+          />
         </div>
       )}
 
-      {error && (
-        <div style={{ color: 'red' }}>
-          <strong>Error:</strong> {error}
+      {columns && rows ? (
+        <div>
+          <h4>Sample Scaled Data</h4>
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                {columns.map((col) => (
+                  <th key={col}>{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr key={i}>
+                  {columns.map((col, j) => (
+                    <td key={j}>{Number(row[col])?.toFixed(3)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+      ) : (
+        <p>No scaled data available.</p>
       )}
     </div>
   );

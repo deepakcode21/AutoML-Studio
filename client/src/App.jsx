@@ -62,36 +62,6 @@ function App() {
     OnchandleSub(true);
   }
 
-  // Handle form submission: send file and options to backend
-  // const handleSubmit = async () => {
-  //   if (!csvFile) return;
-  //   setLoading(true);
-  //   setError('');
-  //   const formData = new FormData();
-  //   formData.append('file', csvFile);
-  //   formData.append('missing', missingStrategy);
-  //   formData.append('encoding', encodingStrategy);
-  //   formData.append('scaler', scaler);
-  //   formData.append('split', splitRatio);
-  //   formData.append('model', model);
-  //   try {
-  //     // Send to FastAPI backend (assumed endpoint /train)
-  //     const res = await fetch('http://localhost:8000/data/upload', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-  //     if (!res.ok) {
-  //       throw new Error(`Server error: ${res.statusText}`);
-  //     }
-  //     const data = await res.json();
-  //     setResults(data);
-  //   } catch (err) {
-  //     setError(err.message || 'Request failed');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h2>Upload CSV File</h2>
