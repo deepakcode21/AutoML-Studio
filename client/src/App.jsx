@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import { Bar } from 'react-chartjs-2';
+import Result from './components/ResultDisplay';
+import Model from './components/ModelSection';
+import Preprocess from './components/preprocessingOption';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +19,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 function App() {
   // State for file and preview data
+  const [submit, OnchandleSub] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
   const [previewData, setPreviewData] = useState([]);  // Array of row objects
   const [columns, setColumns] = useState([]);         // Column headers
@@ -54,36 +58,39 @@ function App() {
       reader.readAsText(file);
     }
   };
+  const handleSubmit = () => {
+    OnchandleSub(true);
+  }
 
   // Handle form submission: send file and options to backend
-  const handleSubmit = async () => {
-    if (!csvFile) return;
-    setLoading(true);
-    setError('');
-    const formData = new FormData();
-    formData.append('file', csvFile);
-    formData.append('missing', missingStrategy);
-    formData.append('encoding', encodingStrategy);
-    formData.append('scaler', scaler);
-    formData.append('split', splitRatio);
-    formData.append('model', model);
-    try {
-      // Send to FastAPI backend (assumed endpoint /train)
-      const res = await fetch('http://localhost:8000/train', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) {
-        throw new Error(`Server error: ${res.statusText}`);
-      }
-      const data = await res.json();
-      setResults(data);
-    } catch (err) {
-      setError(err.message || 'Request failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleSubmit = async () => {
+  //   if (!csvFile) return;
+  //   setLoading(true);
+  //   setError('');
+  //   const formData = new FormData();
+  //   formData.append('file', csvFile);
+  //   formData.append('missing', missingStrategy);
+  //   formData.append('encoding', encodingStrategy);
+  //   formData.append('scaler', scaler);
+  //   formData.append('split', splitRatio);
+  //   formData.append('model', model);
+  //   try {
+  //     // Send to FastAPI backend (assumed endpoint /train)
+  //     const res = await fetch('http://localhost:8000/data/upload', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+  //     if (!res.ok) {
+  //       throw new Error(`Server error: ${res.statusText}`);
+  //     }
+  //     const data = await res.json();
+  //     setResults(data);
+  //   } catch (err) {
+  //     setError(err.message || 'Request failed');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -116,55 +123,20 @@ function App() {
       )}
 
       {/* Preprocessing Options */}
-      <div style={{ marginTop: '20px' }}>
-        <h3>Preprocessing Options</h3>
-        <div>
-          <label>
-            Missing Values:&nbsp;
-            <select value={missingStrategy} onChange={(e) => setMissingStrategy(e.target.value)}>
-              <option value="drop">Drop Rows</option>
-              <option value="mean">Fill with Mean</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Categorical Encoding:&nbsp;
-            <select value={encodingStrategy} onChange={(e) => setEncodingStrategy(e.target.value)}>
-              <option value="label">Label Encoding</option>
-              <option value="onehot">One-Hot Encoding</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Numeric Scaling:&nbsp;
-            <select value={scaler} onChange={(e) => setScaler(e.target.value)}>
-              <option value="standard">StandardScaler</option>
-              <option value="minmax">MinMaxScaler</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Train/Test Split:&nbsp;
-            <select value={splitRatio} onChange={(e) => setSplitRatio(e.target.value)}>
-              <option value="0.8">80 / 20</option>
-              <option value="0.7">70 / 30</option>
-            </select>
-          </label>
-        </div>
-      </div>
+      <Preprocess
+        missingStrategy={missingStrategy}
+        setMissingStrategy={setMissingStrategy}
+        encodingStrategy={encodingStrategy}
+        setEncodingStrategy={setEncodingStrategy}
+        scaler={scaler}
+        setScaler={setScaler}
+        splitRatio={splitRatio}
+        setSplitRatio={setSplitRatio}
+      />
+
 
       {/* Model Selection */}
-      <div style={{ marginTop: '20px' }}>
-        <h3>Select Model</h3>
-        <select value={model} onChange={(e) => setModel(e.target.value)}>
-          <option value="LinearRegression">Linear Regression</option>
-          <option value="DecisionTree">Decision Tree</option>
-          <option value="RandomForest">Random Forest</option>
-        </select>
-      </div>
+      <Model model={model} setModel={setModel} />
 
       {/* Submit Button */}
       <div style={{ marginTop: '20px' }}>
@@ -181,51 +153,18 @@ function App() {
       )}
 
       {/* Results Section */}
-      {results && (
-        <div style={{ marginTop: '30px' }}>
-          <h3>Model Performance</h3>
-          {/* Display metrics if they exist */}
-          {results.accuracy !== undefined && <p>Accuracy: {results.accuracy}</p>}
-          {results.r2 !== undefined && <p>R²: {results.r2}</p>}
-          {results.rmse !== undefined && <p>RMSE: {results.rmse}</p>}
-
-          {/* Confusion Matrix */}
-          {results.confusion_matrix && (
-            <div style={{ marginTop: '20px' }}>
-              <h3>Confusion Matrix</h3>
-              <table style={{ borderCollapse: 'collapse' }} border="1">
-                <tbody>
-                  {results.confusion_matrix.map((row, i) => (
-                    <tr key={i}>
-                      {row.map((val, j) => (
-                        <td key={j} style={{ padding: '8px' }}>{val}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Feature Importance Chart */}
-          {results.feature_importances && (
-            <div style={{ marginTop: '20px' }}>
-              <h3>Feature Importance</h3>
-              <Bar
-                data={{
-                  labels: Object.keys(results.feature_importances),
-                  datasets: [{
-                    label: 'Importance',
-                    data: Object.values(results.feature_importances),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                  }]
-                }}
-                options={{ responsive: true, plugins: { legend: { display: false } } }}
-              />
-            </div>
-          )}
-        </div>
-      )}
+      {
+        submit && (
+          <Result
+            csv={csvFile}
+            model={model}
+            scaler={scaler}
+            splitRatio={splitRatio}
+            missing={missingStrategy}
+            encoding={encodingStrategy}
+          />
+        )
+      }
     </div>
   );
 }

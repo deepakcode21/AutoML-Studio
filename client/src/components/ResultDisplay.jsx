@@ -1,49 +1,44 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, { useEffect, useState } from 'react';
 
-const ResultsDisplay = ({ results }) => {
-  if (!results) return null;
+function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+  if (csv) {
+    const formData = new FormData();
+    formData.append('file', csv);
+    formData.append('model', model);
+    formData.append('scaler', scaler);
+    formData.append('splitRatio', splitRatio);
+    formData.append('missing', missing);
+    formData.append('encoding', encoding);
+
+    fetch("http://localhost:8000/process/", {
+      method: "POST",
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(data => setResult(data))
+      .catch(err => console.error("Error:", err));
+      console.log('result: ',result)
+  }
+}, [csv, model, scaler, splitRatio, missing, encoding]);
+
 
   return (
     <div>
-      <h3>Model Performance</h3>
-      {results.accuracy && <p>Accuracy: {results.accuracy}</p>}
-      {results.r2 && <p>R²: {results.r2}</p>}
-      {results.rmse && <p>RMSE: {results.rmse}</p>}
-
-      {results.confusion_matrix && (
-        <>
-          <h4>Confusion Matrix</h4>
-          <table border="1" style={{ borderCollapse: 'collapse' }}>
-            <tbody>
-              {results.confusion_matrix.map((row, i) => (
-                <tr key={i}>
-                  {row.map((val, j) => <td key={j}>{val}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>    
-      )}
-
-      {results.feature_importances && (
-        <>
-          <h4>Feature Importance</h4>
-          <Bar
-            data={{
-              labels: Object.keys(results.feature_importances),
-              datasets: [{
-                label: 'Importance',
-                data: Object.values(results.feature_importances),
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-              }]
-            }}
-            options={{ responsive: true, plugins: { legend: { display: false } } }}
-          />
-        </>
+      <h3>Result Component</h3>
+      {result ? (
+        <div>
+          <p>Model Used: {result.model_used}</p>
+          <p>RMSE: {result.rmse}</p>
+          <p>R² Score: {result.r2_score}</p>
+        </div>
+      ) : (
+        <p>Loading...</p>
       )}
     </div>
   );
-};
+}
 
-export default ResultsDisplay;
+export default Result;

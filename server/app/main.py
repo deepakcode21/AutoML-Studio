@@ -17,3 +17,6 @@ app.add_middleware(
 # Include routes
 app.include_router(data_routes.router)
 app.include_router(model_routes.router)
+@app.get("/test")
+def test():
+    return {"message": "Backend is working!"}
