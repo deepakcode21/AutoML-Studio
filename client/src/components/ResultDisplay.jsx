@@ -4,14 +4,9 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
-  console.log('Props in response:', { csv, model, scaler, splitRatio, missing, encoding });
-
   useEffect(() => {
     const sendRequest = async () => {
-      if (!csv) {
-        console.warn("No CSV file provided.");
-        return;
-      }
+      if (!csv) return;
 
       const formData = new FormData();
       formData.append('file', csv);
@@ -28,12 +23,9 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
         });
 
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-
         const data = await res.json();
-        console.log('Backend response:', data);
         setResponse(data);
       } catch (err) {
-        console.error('API request failed:', err);
         setError(err.message);
       }
     };
@@ -41,111 +33,78 @@ function Result({ csv, model, scaler, splitRatio, missing, encoding }) {
     sendRequest();
   }, [csv, model, scaler, splitRatio, missing, encoding]);
 
-  if (error) {
-    return <p style={{ color: 'red' }}>Error: {error}</p>;
-  }
-
-  if (!response) {
-    return <p>Loading or waiting for file...</p>;
-  }
+  if (error) return <p className="text-red-500 mt-4">Error: {error}</p>;
+  if (!response) return <p className="text-gray-500 mt-4">Loading or waiting for file...</p>;
 
   const { metrics, visualization, prediction_plot, columns, rows } = response;
 
   return (
-    <div style={{
-      padding: '1.5rem',
-      border: '1px solid #ddd',
-      borderRadius: '12px',
-      backgroundColor: '#fafafa',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-      fontFamily: 'Arial, sans-serif'
-    }}>
-      <h3 style={{ marginBottom: '1rem' }}>📊 Model Performance</h3>
-  
+    <div className="mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h3 className="text-2xl font-bold text-blue-700 mb-4">📊 Model Performance</h3>
+
       {metrics ? (
-        <ul style={{ lineHeight: '1.8' }}>
+        <ul className="text-gray-800 space-y-2 mb-6">
           <li><strong>RMSE:</strong> {metrics.rmse?.toFixed(4)}</li>
           <li><strong>R²:</strong> {metrics.r2?.toFixed(4)}</li>
           <li><strong>MAE:</strong> {metrics.mae?.toFixed(4)}</li>
         </ul>
       ) : (
-        <p style={{ color: '#999' }}>No performance metrics found.</p>
+        <p className="text-gray-500">No performance metrics found.</p>
       )}
-  
-  <div style={{
-  display: 'flex',
-  gap: '2rem',
-  marginTop: '2rem',
-  flexWrap: 'wrap',
-  justifyContent: 'center'
-}}>
-  {/* Feature Importance */}
-  {visualization && (
-    <div style={{ flex: '1 1 400px', maxWidth: '600px' }}>
-      <h4 style={{ marginBottom: '0.5rem' }}>🧠 Feature Importance</h4>
-      <img
-        src={`data:image/png;base64,${visualization}`}
-        alt="Feature Importance"
-        style={{ width: '100%', borderRadius: '6px', border: '1px solid #ddd' }}
-      />
-    </div>
-  )}
 
-  {/* Actual vs Predicted */}
-  {prediction_plot && (
-    <div style={{ flex: '1 1 400px', maxWidth: '600px' }}>
-      <h4 style={{ marginBottom: '0.5rem' }}>📈 Actual vs Predicted</h4>
-      <img
-        src={`data:image/png;base64,${prediction_plot}`}
-        alt="Actual vs Predicted"
-        style={{ width: '100%', borderRadius: '6px', border: '1px solid #ddd' }}
-      />
-    </div>
-  )}
-</div>
+      <div className="flex flex-wrap justify-center gap-8 my-8">
+        {visualization && (
+          <div className="max-w-xl">
+            <h4 className="font-semibold mb-2">🧠 Feature Importance</h4>
+            <img
+              src={`data:image/png;base64,${visualization}`}
+              alt="Feature Importance"
+              className="w-full rounded border"
+            />
+          </div>
+        )}
 
-  
-      {/* Scaled Table */}
+        {prediction_plot && (
+          <div className="max-w-xl">
+            <h4 className="font-semibold mb-2">📈 Actual vs Predicted</h4>
+            <img
+              src={`data:image/png;base64,${prediction_plot}`}
+              alt="Actual vs Predicted"
+              className="w-full rounded border"
+            />
+          </div>
+        )}
+      </div>
+
       {columns && rows ? (
-        <div style={{ marginTop: '2rem' }}>
-          <h4 style={{ marginBottom: '1rem' }}>🧪 Sample Scaled Data</h4>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{
-              borderCollapse: 'collapse',
-              width: '100%',
-              textAlign: 'left'
-            }}>
-              <thead>
-                <tr>
-                  {columns.map((col) => (
-                    <th key={col} style={{
-                      borderBottom: '2px solid #ccc',
-                      padding: '8px',
-                      background: '#f0f0f0'
-                    }}>{col}</th>
+        <div className="overflow-x-auto">
+          <h4 className="text-lg font-semibold mb-2">🧪 Sample Scaled Data</h4>
+          <table className="min-w-full table-auto border border-collapse text-sm">
+            <thead className="bg-blue-100">
+              <tr>
+                {columns.map((col) => (
+                  <th key={col} className="border px-3 py-1 text-left">{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr key={i} className="odd:bg-white even:bg-blue-50">
+                  {columns.map((col, j) => (
+                    <td key={j} className="border px-3 py-1">
+                      {isNaN(Number(row[col])) ? '-' : Number(row[col]).toFixed(3)}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, i) => (
-                  <tr key={i}>
-                    {columns.map((col, j) => (
-                      <td key={j} style={{ padding: '8px', borderBottom: '1px solid #eee' }}>
-                        {isNaN(Number(row[col])) ? '-' : Number(row[col]).toFixed(3)}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
-        <p style={{ color: '#999' }}>No scaled data available.</p>
+        <p className="text-gray-500 mt-4">No scaled data available.</p>
       )}
     </div>
   );
-  
 }
 
 export default Result;
