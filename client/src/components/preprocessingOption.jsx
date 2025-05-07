@@ -6,41 +6,43 @@ const PreprocessingOptions = ({
   scaler, setScaler,
   splitRatio, setSplitRatio
 }) => (
-  <div>
-    <h3>Preprocessing Options</h3>
-    <div>
-      <label>Missing Values:
-        <select value={missingStrategy} onChange={e => setMissingStrategy(e.target.value)}>
+  <section className="preprocess-container">
+    <h3 className="preprocess-title">Preprocessing Options</h3>
+
+    <div className="preprocess-grid">
+      <div className="form-group">
+        <label htmlFor="missing">Missing Values</label>
+        <select id="missing" value={missingStrategy} onChange={e => setMissingStrategy(e.target.value)}>
           <option value="drop">Drop Rows</option>
           <option value="mean">Fill with Mean</option>
         </select>
-      </label>
-    </div>
-    <div>
-      <label>Encoding:
-        <select value={encodingStrategy} onChange={e => setEncodingStrategy(e.target.value)}>
-          <option value="label">Label</option>
-          <option value="onehot">One-Hot</option>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="encoding">Encoding</label>
+        <select id="encoding" value={encodingStrategy} onChange={e => setEncodingStrategy(e.target.value)}>
+          <option value="label">Label Encoding</option>
+          <option value="onehot">One-Hot Encoding</option>
         </select>
-      </label>
-    </div>
-    <div>
-      <label>Scaler:
-        <select value={scaler} onChange={e => setScaler(e.target.value)}>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="scaler">Scaler</label>
+        <select id="scaler" value={scaler} onChange={e => setScaler(e.target.value)}>
           <option value="standard">StandardScaler</option>
           <option value="minmax">MinMaxScaler</option>
         </select>
-      </label>
-    </div>
-    <div>
-      <label>Split Ratio:
-        <select value={splitRatio} onChange={e => setSplitRatio(e.target.value)}>
-          <option value="0.8">80/20</option>
-          <option value="0.7">70/30</option>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="split">Train/Test Split</label>
+        <select id="split" value={splitRatio} onChange={e => setSplitRatio(e.target.value)}>
+          <option value="0.8">80 / 20</option>
+          <option value="0.7">70 / 30</option>
         </select>
-      </label>
+      </div>
     </div>
-  </div>
+  </section>
 );
 
 export default PreprocessingOptions;
