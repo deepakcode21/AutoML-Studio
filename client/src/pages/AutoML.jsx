@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import Result from '../components/ResultDisplay';
 import Model from '../components/ModelSelection'
 import Preprocess from '../components/PreprocessingOptions';
-import '../App.css'; // Still using your custom CSS
+
 
 function AutoML() {
   const [submit, OnchandleSub] = useState(false);
