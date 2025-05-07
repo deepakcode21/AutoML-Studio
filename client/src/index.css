@@ -5,3 +5,8 @@
 body{
   overflow-x: hidden;
 }
+
+
+.object-cover {
+  object-fit: cover;
+}
