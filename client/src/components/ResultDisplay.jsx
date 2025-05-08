@@ -27,7 +27,7 @@ function Result({
       formData.append('splitRatio', splitRatio);
 
       try {
-        const res = await fetch('http://localhost:8000/train', {
+        const res = await fetch('https://automl-studio-production-0873.up.railway.app/train', {
           method: 'POST',
           body: formData,
         });
