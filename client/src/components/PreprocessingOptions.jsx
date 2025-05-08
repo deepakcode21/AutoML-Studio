@@ -13,8 +13,8 @@ const PreprocessingOptions = ({
 }) => (
   <section className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
     <div className="flex items-center mb-4">
-      <div className="bg-purple-100 p-2 rounded-lg mr-3">
-        <FiSettings className="text-purple-600" size={20} />
+      <div className="bg-gray-100 p-2 rounded-lg mr-3">
+        <FiSettings className="text-yellow-600" size={20} />
       </div>
       <h3 className="text-xl font-semibold text-gray-800">Data Preprocessing</h3>
     </div>
@@ -31,7 +31,7 @@ const PreprocessingOptions = ({
         <select 
           value={missingStrategy} 
           onChange={e => setMissingStrategy(e.target.value)} 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500"
         >
           <option value="drop">Drop Rows</option>
           <option value="mean">Fill with Mean</option>
@@ -50,7 +50,7 @@ const PreprocessingOptions = ({
         <select 
           value={encodingStrategy} 
           onChange={e => setEncodingStrategy(e.target.value)} 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500"
         >
           <option value="label">Label Encoding</option>
           <option value="onehot">One-Hot Encoding</option>
@@ -69,7 +69,7 @@ const PreprocessingOptions = ({
         <select 
           value={scaler} 
           onChange={e => setScaler(e.target.value)} 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500"
         >
           <option value="standard">Standard Scaler</option>
           <option value="minmax">MinMax Scaler</option>
@@ -88,7 +88,7 @@ const PreprocessingOptions = ({
         <select 
           value={splitRatio} 
           onChange={e => setSplitRatio(e.target.value)} 
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 focus:border-yellow-500"
         >
           <option value="0.8">80% Train / 20% Test</option>
           <option value="0.7">70% Train / 30% Test</option>

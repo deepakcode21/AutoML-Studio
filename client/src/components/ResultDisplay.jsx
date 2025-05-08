@@ -94,7 +94,7 @@ function Result({
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden" style={{marginTop:'10px'}}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+      <div className="bg-gradient-to-r from-yellow-600 to-gray-600 p-6 text-white">
         <h2 className="text-2xl font-bold flex items-center">
           <FiCheck className="mr-2" /> Model Training Complete
         </h2>
@@ -212,7 +212,7 @@ function Result({
         </button>
         <button 
           onClick={handleTryAnother}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
+          className="bg-yellow-600 hover:bg-orange-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
         >
           <FiRefreshCw className="mr-2" />
           Try Another Model

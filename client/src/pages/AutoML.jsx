@@ -67,9 +67,10 @@ function AutoML() {
   };
 
   return (
-    <div className="app-container px-4 py-8 max-w-7xl mx-auto min-h-screen">
+    <div className="app-container px-4 py-8 max-w-7xl mx-auto mt-20 min-h-screen">
+      
       <header className="app-header text-center mb-12">
-        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
+        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-700 to-gray-400 mb-4">
           AutoML Studio
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -84,7 +85,7 @@ function AutoML() {
           {[1, 2, 3, 4].map((step) => (
             <div key={step} className="flex flex-col items-center">
               <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold 
-                ${activeStep >= step ? 'bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg' : 'bg-gray-300'}`}>
+                ${activeStep >= step ? 'bg-gradient-to-r from-yellow-500 to-gray-500 shadow-lg' : 'bg-gray-300'}`}>
                 {activeStep > step ? <FiCheckCircle size={24} /> : step}
               </div>
               <span className="mt-2 text-sm font-medium text-gray-700">
@@ -101,11 +102,11 @@ function AutoML() {
       {/* Step 1: File Upload */}
       {activeStep === 1 && (
         <section className="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 text-center">
-          <div className="bg-blue-50 p-6 rounded-lg border-2 border-dashed border-blue-200 mb-6">
-            <FiUpload className="mx-auto text-blue-500" size={48} />
+          <div className="bg-yellow-50 p-6 rounded-lg border-2 border-dashed border-blue-200 mb-6">
+            <FiUpload className="mx-auto text-yellow-500" size={48} />
             <h2 className="text-2xl font-semibold text-gray-800 mt-4 mb-2">Upload Your Dataset</h2>
             <p className="text-gray-600 mb-6">Drag & drop your CSV file here or click to browse</p>
-            <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 inline-block">
+            <label className="cursor-pointer bg-yellow-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 inline-block">
               Select File
               <input type="file" accept=".csv" onChange={handleFileChange} className="hidden" />
             </label>
@@ -119,7 +120,7 @@ function AutoML() {
         <section className="mb-10 bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center">
-              <FiBarChart2 className="text-blue-500 mr-2" size={20} />
+              <FiBarChart2 className="text-yellow-500 mr-2" size={20} />
               <h2 className="text-xl font-semibold text-gray-800">Data Preview</h2>
             </div>
             <p className="text-gray-600 text-sm mt-1">First 5 rows of your dataset</p>
@@ -151,7 +152,7 @@ function AutoML() {
           <div className="bg-gray-50 px-6 py-3 flex justify-end">
             <button
               onClick={() => setActiveStep(3)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+              className="bg-yellow-600 hover:bg--700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
             >
               Continue to Configuration <span className="ml-1">→</span>
             </button>
@@ -177,7 +178,7 @@ function AutoML() {
 
           <div className="text-center mt-8">
             <button
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 transform hover:scale-105"
+              className="bg-gradient-to-r from-yellow-600 to-gray-600 hover:yellow-blue-700 hover:to-yellow-400 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 transform hover:scale-105"
               onClick={handleSubmit}
               disabled={!csvFile || loading}
             >

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navigate } from "react-router-dom";
-import deepak from "../assets/deepak.jpg"
-import pivink from "../assets/pivink.jpg"
+import deepak from "../assets/deepak.jpg";
+import pivink from "../assets/pivink.jpg";
 import {
   Github,
   Linkedin,
@@ -53,54 +53,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div className="container max-w-7xl mx-auto flex items-center justify-between h-16 px-4 md:px-6">
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-yellow-600 to-gray-600 w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold">
-              A
-            </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-yellow-600 to-gray-600 bg-clip-text text-transparent">
-              AutoML Studio
-            </span>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              to="#features"
-              className="text-sm font-medium text-yellow-600 hover:text-yellow-900"
-            >
-              Features
-            </Link>
-            <Link
-              to="#how-it-works"
-              className="text-sm font-medium text-yellow-600 hover:text-yellow-900"
-            >
-              How It Works
-            </Link>
-            <Link
-              to="#team"
-              className="text-sm font-medium text-yellow-600 hover:text-yellow-900"
-            >
-              Team
-            </Link>
-            <Link
-              to="#tech"
-              className="text-sm font-medium text-yellow-600 hover:text-yellow-900"
-            >
-              Technology
-            </Link>
-          </div>
-          <div>
-            <button
-              onClick={() => navigate("/automl")}
-              className="px-4 py-2 rounded-md bg-gradient-to-r from-yellow-600 to-gray-600 hover:from-yellow-600 hover:to-yellow-700 text-white transition-colors"
-            >
-              Get Started
-            </button>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 md:px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-100/40 via-transparent to-transparent"></div>
@@ -127,12 +79,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
               <button
                 onClick={() => navigate("/automl")}
-                className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-600 hover:from-gray-700 hover:to-gray-700 text-white flex items-center justify-center"
+                className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-400 hover:from-orange-700 hover:to-gray-700 text-white flex items-center justify-center"
               >
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
-              <button className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-600 hover:from-gray-700 hover:to-gray-700 text-white flex items-center justify-center">
+              <button className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-400 hover:from-orange-700 hover:to-gray-700 text-white flex items-center justify-center">
                 Watch Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
@@ -374,21 +326,21 @@ export default function Home() {
                   title: "Smart Processing",
                   description:
                     "AI-powered cleaning, transformation, and feature engineering with visual guidance.",
-                    color: "from-yellow-500 to-gray-500",
+                  color: "from-yellow-500 to-gray-500",
                 },
                 {
                   icon: <Network className="h-7 w-7" />,
                   title: "Model Crafting",
                   description:
                     "AutoML optimization or manual selection from 50+ state-of-the-art algorithms.",
-                    color: "from-yellow-500 to-gray-500",
+                  color: "from-yellow-500 to-gray-500",
                 },
                 {
                   icon: <BarChart3 className="h-7 w-7" />,
                   title: "Insight Synthesis",
                   description:
                     "Interactive 3D visualizations, explainable AI, and one-click deployment.",
-                    color: "from-yellow-500 to-gray-500",
+                  color: "from-yellow-500 to-gray-500",
                 },
               ].map((step, index) => (
                 <motion.div
@@ -404,7 +356,6 @@ export default function Home() {
 
                   <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-200/60 h-full">
                     {/* Step number */}
-                   
 
                     {/* Icon container */}
                     <div
@@ -438,123 +389,135 @@ export default function Home() {
 
       {/* Team Section */}
       <section
-  id="team"
-  className="py-20 px-4 md:px-6 bg-gradient-to-b from-indigo-50/30 to-violet-50/20 relative"
->
-  {/* Background elements */}
-  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgOGgxNk0wIDBoMTZtMCAxNmgxNm0wLThoMTZtMCAwaDE2IiBzdHJva2U9IiNlZGVkZWQiIGZpbGw9Im5vbmUiLz48L3N2Zz4=')] opacity-5" />
-  <div className="absolute -right-20 top-1/4 w-96 h-96 bg-violet-100/10 rounded-full blur-3xl" />
-  <div className="absolute -left-20 bottom-0 w-96 h-96 bg-indigo-100/10 rounded-full blur-3xl" />
-  <div className="absolute -left-20 top-1/2 w-96 h-106 bg-violet-100/10 rounded-full blur-3xl" />
+        id="team"
+        className="py-20 px-4 md:px-6 bg-gradient-to-b from-indigo-50/30 to-violet-50/20 relative"
+      >
+        {/* Background elements */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgOGgxNk0wIDBoMTZtMCAxNmgxNm0wLThoMTZtMCAwaDE2IiBzdHJva2U9IiNlZGVkZWQiIGZpbGw9Im5vbmUiLz48L3N2Zz4=')] opacity-5" />
+        <div className="absolute -right-20 top-1/4 w-96 h-96 bg-violet-100/10 rounded-full blur-3xl" />
+        <div className="absolute -left-20 bottom-0 w-96 h-96 bg-indigo-100/10 rounded-full blur-3xl" />
+        <div className="absolute -left-20 top-1/2 w-96 h-106 bg-violet-100/10 rounded-full blur-3xl" />
 
-  <div className="container max-w-7xl mx-auto relative">
-    <motion.div
-      className="text-center mb-16"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-    >
-      <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-600 to-gray-50 bg-clip-text text-transparent">
-        Meet The Developer
-      </h2>
-      <p className="text-lg md:text-xl text-gray-50 max-w-2xl mx-auto">
-        Passionate innovators creating intuitive machine learning experiences
-      </p>
-    </motion.div>
+        <div className="container max-w-7xl mx-auto relative">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-600 to-gray-50 bg-clip-text text-transparent">
+              Meet The Developer
+            </h2>
+            <p className="text-lg md:text-xl text-gray-50 max-w-2xl mx-auto">
+              Passionate innovators creating intuitive machine learning
+              experiences
+            </p>
+          </motion.div>
 
-    <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-      {[
-        {
-          image: deepak, // Update path to your image
-          name: "Deepak Code",
-          role: "Backend Architect & Security Lead",
-          bio: "Software Developer and experience in distributed systems and cryptographic solutions. Focused on building secure, scalable infrastructure with privacy-by-design principles.",
-          color: "from-yellow-600 to-gray-600",
-          links: [
-            { icon: Github, url: "https://github.com/deepakcode21" },
-            { icon: Linkedin, url: "https://www.linkedin.com/in/deepakcode21/" },
-            { icon: Mail, url: "deepakcode21@gmail.com" },
-          ],
-        },
-        {
-          image: pivink, // Update path to your image
-          name: "Pivink Kumar",
-          role: "Data Science & Frontend Lead",
-          bio: "Full-stack data scientist specializing in predictive analytics and AI-powered interfaces. Passionate about making complex ML accessible through elegant design.",
-          color: "from-yellow-600 to-gray-600",
-          links: [
-            { icon: Github, url: "https://github.com/Pivink" },
-            { icon: Linkedin, url: "https://www.linkedin.com/in/pivink-kumar-a791b32b3/" },
-            { icon: Mail, url: "https://portfolio-seven-iota-51.vercel.app/" },
-          ],
-        },
-      ].map((member, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: index * 0.15, duration: 0.6 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="group relative"
-        >
-          {/* Hover glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-100/30 to-indigo-100/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                image: deepak, // Update path to your image
+                name: "Deepak Code",
+                role: "Backend Architect & Security Lead",
+                bio: "Software Developer and experience in distributed systems and cryptographic solutions. Focused on building secure, scalable infrastructure with privacy-by-design principles.",
+                color: "from-yellow-600 to-gray-600",
+                links: [
+                  { icon: Github, url: "https://github.com/deepakcode21" },
+                  {
+                    icon: Linkedin,
+                    url: "https://www.linkedin.com/in/deepakcode21/",
+                  },
+                  { icon: Mail, url: "deepakcode21@gmail.com" },
+                ],
+              },
+              {
+                image: pivink, // Update path to your image
+                name: "Pivink Kumar",
+                role: "Data Science & Frontend Lead",
+                bio: "Full-stack data scientist specializing in predictive analytics and AI-powered interfaces. Passionate about making complex ML accessible through elegant design.",
+                color: "from-yellow-600 to-gray-600",
+                links: [
+                  { icon: Github, url: "https://github.com/Pivink" },
+                  {
+                    icon: Linkedin,
+                    url: "https://www.linkedin.com/in/pivink-kumar-a791b32b3/",
+                  },
+                  {
+                    icon: Mail,
+                    url: "https://portfolio-seven-iota-51.vercel.app/",
+                  },
+                ],
+              },
+            ].map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: index * 0.15, duration: 0.6 }}
+                viewport={{ once: true, margin: "-100px" }}
+                className="group relative"
+              >
+                {/* Hover glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-100/30 to-indigo-100/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          <div className="h-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-200/60 overflow-hidden">
-            {/* Profile header */}
-            <div className={`h-2 bg-gradient-to-r ${member.color}`} />
-            <div className="p-6 md:p-8">
-              <div className="flex items-center gap-6">
-                {/* Updated Image Container */}
-                <div className={`relative p-0.5 rounded-full bg-gradient-to-br ${member.color}`}>
-                  <div className="bg-white rounded-full p-1">
-                    <img
-                      src={member.image}
-                      alt={`${member.name}'s profile`}
-                      className="h-20 w-20 rounded-full object-cover border-2 border-white"
-                    />
+                <div className="h-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-slate-200/60 overflow-hidden">
+                  {/* Profile header */}
+                  <div className={`h-2 bg-gradient-to-r ${member.color}`} />
+                  <div className="p-6 md:p-8">
+                    <div className="flex items-center gap-6">
+                      {/* Updated Image Container */}
+                      <div
+                        className={`relative p-0.5 rounded-full bg-gradient-to-br ${member.color}`}
+                      >
+                        <div className="bg-white rounded-full p-1">
+                          <img
+                            src={member.image}
+                            alt={`${member.name}'s profile`}
+                            className="h-20 w-20 rounded-full object-cover border-2 border-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="text-2xl font-bold text-slate-800">
+                          {member.name}
+                        </h3>
+                        <p className="text-slate-600 mt-1">{member.role}</p>
+                      </div>
+                    </div>
+
+                    {/* Bio */}
+                    <p className="text-slate-600 mt-6 leading-relaxed">
+                      {member.bio}
+                    </p>
+
+                    {/* Social links */}
+                    <div className="mt-6 pt-4 border-t border-slate-200/60 flex gap-4">
+                      {member.links.map((link, linkIndex) => (
+                        <motion.a
+                          key={linkIndex}
+                          href={link.url}
+                          className="text-slate-600 hover:text-indigo-600 transition-colors p-2 rounded-lg hover:bg-slate-100/50"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <link.icon className="h-6 w-6" />
+                        </motion.a>
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-800">
-                    {member.name}
-                  </h3>
-                  <p className="text-slate-600 mt-1">{member.role}</p>
-                </div>
-              </div>
-
-              {/* Bio */}
-              <p className="text-slate-600 mt-6 leading-relaxed">
-                {member.bio}
-              </p>
-
-              {/* Social links */}
-              <div className="mt-6 pt-4 border-t border-slate-200/60 flex gap-4">
-                {member.links.map((link, linkIndex) => (
-                  <motion.a
-                    key={linkIndex}
-                    href={link.url}
-                    className="text-slate-600 hover:text-indigo-600 transition-colors p-2 rounded-lg hover:bg-slate-100/50"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <link.icon className="h-6 w-6" />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* Technology Section */}
       <section
         id="tech"
-        className="py-20 px-4 md:px-6 bg-gradient-to-b from-indigo-50/20 to-violet-50/10 relative overflow-hidden"
+        className="py-10 px-4 md:px-6 bg-gradient-to-b from-indigo-50/20 to-violet-50/10 relative overflow-hidden"
       >
         {/* Background elements */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDIyQzYuNDc3IDIyIDIgMTcuNTIzIDIgMTJTNi40NzcgMiAxMiAycyAxMCA0LjQ3NyAxMCAxMC00LjQ3NyAxMC0xMCAxMHptMC0yYTggOCAwIDEgMCAwLTE2IDggOCAwIDAgMCAwIDE2eiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWVlZWVlIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=')] opacity-10" />
@@ -668,91 +631,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-
-      {/* Footer */}
-      {/* Footer */}
-      <footer className="py-12 px-4 md:px-6 bg-slate-900 text-slate-300">
-        <div className="container max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {/* Brand Column */}
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-gradient-to-r from-violet-500 to-indigo-500 w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold">
-                  A
-                </div>
-                <span className="font-bold text-2xl text-white">
-                  AutoML Studio
-                </span>
-              </div>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Empowering everyone to build machine learning solutions without
-                code.
-              </p>
-            </div>
-
-            {/* Links Group */}
-            <div className="md:col-span-2 flex flex-col md:flex-row justify-between gap-8">
-              {/* Product Links */}
-              <div className="flex-1">
-                <h3 className="font-semibold text-white mb-5 text-lg">
-                  Product
-                </h3>
-                <ul className="space-y-3">
-                  {["Features", "Pricing", "Documentation", "API"].map(
-                    (item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="text-slate-400 hover:text-white transition-colors text-sm"
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-
-              {/* Company Links */}
-              <div className="flex-1">
-                <h3 className="font-semibold text-white mb-5 text-lg">
-                  Company
-                </h3>
-                <ul className="space-y-3">
-                  {["About", "Blog", "Careers", "Contact"].map((item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-slate-400 hover:text-white transition-colors text-sm"
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500 text-center md:text-left order-2 md:order-1">
-              © {new Date().getFullYear()} AutoML Studio. All rights reserved.
-            </p>
-            <div className="flex gap-6 order-1 md:order-2">
-              {[Github, Linkedin, Mail].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="text-slate-400 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-lg"
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
