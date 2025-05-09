@@ -122,7 +122,7 @@ function AutoML() {
             <p className="text-gray-600 mb-6">
               Drag & drop your CSV file here or click to browse
             </p>
-            <label className="cursor-pointer bg-yellow-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 inline-block">
+            <label className="cursor-pointer bg-yellow-600 hover:bg-orange-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 inline-block">
               Select File
               <input
                 type="file"
@@ -188,7 +188,7 @@ function AutoML() {
           <div className="bg-gray-50 px-6 py-3 flex justify-end">
             <button
               onClick={() => setActiveStep(3)}
-              className="bg-yellow-600 hover:bg--700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+              className="bg-yellow-600 hover:bg-orange-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
             >
               Continue to Configuration <span className="ml-1">→</span>
             </button>
@@ -214,7 +214,7 @@ function AutoML() {
 
           <div className="text-center mt-8">
             <button
-              className="bg-gradient-to-r from-yellow-600 to-gray-600 hover:yellow-blue-700 hover:to-yellow-400 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 transform hover:scale-105"
+              className="bg-gradient-to-r from-yellow-600 to-gray-600 hover:from-orange-600 hover:to-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200 transform hover:scale-105"
               onClick={handleSubmit}
               disabled={!csvFile || loading}
             >

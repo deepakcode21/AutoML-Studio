@@ -531,7 +531,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-600 to-gray-650 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-600 to-gray-100 bg-clip-text text-transparent">
               Modern Tech Stack
             </h2>
             <p className="text-lg md:text-xl text-gray-50 max-w-2xl mx-auto">

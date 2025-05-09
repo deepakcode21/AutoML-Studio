@@ -31,10 +31,10 @@ const Footer = () => {
             {/* Brand Column */}
             <div className="md:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-gradient-to-r from-violet-500 to-indigo-500 w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold">
+                <div className="bg-gradient-to-r from-yellow-600 to-gray-600 w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold">
                   A
                 </div>
-                <span className="font-bold text-2xl text-white">
+                <span className="font-bold text-2xl bg-gradient-to-r from-yellow-600 to-gray-400 bg-clip-text text-transparent">
                   AutoML Studio
                 </span>
               </div>
