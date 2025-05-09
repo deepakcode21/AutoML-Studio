@@ -22,8 +22,12 @@ import {
     User,
     Zap,
   } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+
+  const navigate = useNavigate();
+
   return (
     <footer className="py-12 px-4 md:px-6 bg-slate-900 text-slate-300">
         <div className="container max-w-7xl mx-auto">
@@ -34,7 +38,7 @@ const Footer = () => {
                 <div className="bg-gradient-to-r from-yellow-600 to-gray-600 w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold">
                   A
                 </div>
-                <span className="font-bold text-2xl bg-gradient-to-r from-yellow-600 to-gray-400 bg-clip-text text-transparent">
+                <span onClick={() => navigate("/")} className="font-bold text-2xl bg-gradient-to-r from-yellow-600 to-gray-400 bg-clip-text text-transparent cursor-default">
                   AutoML Studio
                 </span>
               </div>
