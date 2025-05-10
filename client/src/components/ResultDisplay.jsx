@@ -51,6 +51,34 @@ function Result({
     }
   };
 
+  const handleDownload = () => {
+    if (!columns || !rows) return;
+
+    // 1) CSV content banana
+    const header = columns.join(',');
+    const dataLines = rows.map(row =>
+      columns.map(col => {
+        // Agar value me comma ho toh quote me wrap kar lo
+        const cell = String(row[col] ?? '');
+        return cell.includes(',') ? `"${cell}"` : cell;
+      }).join(',')
+    );
+    const csvContent = [header, ...dataLines].join('\n');
+
+    // 2) Blob & URL create karna
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // 3) Hidden link pe click karke download trigger karna
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${model}_results.csv`;  // filename dynamic
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);  // Cleanup
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
@@ -206,10 +234,13 @@ function Result({
 
       {/* Actions */}
       <div className="bg-gray-50 px-6 py-4 flex justify-between">
-        <button className="text-gray-600 hover:text-gray-800 font-medium flex items-center">
-          <FiDownload className="mr-2" />
-          Download Results
-        </button>
+       <button
+        onClick={handleDownload}
+        className="text-gray-600 hover:text-gray-800 font-medium flex items-center"
+      >
+        <FiDownload className="mr-2" />
+        Download Results
+      </button>
         <button 
           onClick={handleTryAnother}
           className="bg-yellow-600 hover:bg-orange-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
