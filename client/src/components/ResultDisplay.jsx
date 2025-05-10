@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FiBarChart2, FiTrendingUp, FiCheck, FiAlertTriangle, FiDownload, FiRefreshCw } from 'react-icons/fi';
+import Dashboard from './Dashboard';
+import Dashboard2 from './Dashboard2';
 
-function Result({ 
-  csv, 
-  model, 
-  scaler, 
-  splitRatio, 
-  missing, 
+function Result({
+  csv,
+  model,
+  scaler,
+  splitRatio,
+  missing,
   encoding,
-  onReset 
+  onReset
 }) {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -47,36 +49,32 @@ function Result({
 
   const handleTryAnother = () => {
     if (onReset) {
-      onReset(); // Call the reset function from parent
+      onReset();
     }
   };
 
   const handleDownload = () => {
-    if (!columns || !rows) return;
+    if (!response?.columns || !response?.rows) return;
 
-    // 1) CSV content banana
-    const header = columns.join(',');
-    const dataLines = rows.map(row =>
-      columns.map(col => {
-        // Agar value me comma ho toh quote me wrap kar lo
+    const header = response.columns.join(',');
+    const dataLines = response.rows.map(row =>
+      response.columns.map(col => {
         const cell = String(row[col] ?? '');
         return cell.includes(',') ? `"${cell}"` : cell;
       }).join(',')
     );
     const csvContent = [header, ...dataLines].join('\n');
 
-    // 2) Blob & URL create karna
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
 
-    // 3) Hidden link pe click karke download trigger karna
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${model}_results.csv`;  // filename dynamic
+    link.download = `${model}_results.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);  // Cleanup
+    URL.revokeObjectURL(url);
   };
 
   if (loading) {
@@ -117,10 +115,10 @@ function Result({
 
   if (!response) return null;
 
-  const { metrics, visualization, prediction_plot, columns, rows } = response;
+  const { metrics, visualization, prediction_plot, columns, rows, dashboard_metrics } = response;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden" style={{marginTop:'10px'}}>
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden" style={{ marginTop: '10px' }}>
       {/* Header */}
       <div className="bg-gradient-to-r from-yellow-600 to-gray-600 p-6 text-white">
         <h2 className="text-2xl font-bold flex items-center">
@@ -134,7 +132,7 @@ function Result({
         <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
           <FiBarChart2 className="mr-2 text-blue-500" /> Performance Metrics
         </h3>
-        
+
         {metrics ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
@@ -144,7 +142,7 @@ function Result({
               </p>
               <p className="text-xs text-blue-700 mt-1">Lower is better</p>
             </div>
-            
+
             <div className="bg-green-50 p-4 rounded-lg border border-green-100">
               <h4 className="text-sm font-medium text-green-800 mb-1">R² Score</h4>
               <p className="text-2xl font-bold text-green-600">
@@ -152,13 +150,37 @@ function Result({
               </p>
               <p className="text-xs text-green-700 mt-1">Closer to 1 is better</p>
             </div>
-            
+
             <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
               <h4 className="text-sm font-medium text-purple-800 mb-1">Mean Absolute Error</h4>
               <p className="text-2xl font-bold text-purple-600">
                 {metrics.mae?.toFixed(4) || 'N/A'}
               </p>
               <p className="text-xs text-purple-700 mt-1">Lower is better</p>
+            </div>
+
+            <div className="bg-amber-50 p-4 rounded-lg border border-amber-100">
+              <h4 className="text-sm font-medium text-amber-800 mb-1">Explained Variance</h4>
+              <p className="text-2xl font-bold text-amber-600">
+                {metrics.explained_variance?.toFixed(4) || 'N/A'}
+              </p>
+              <p className="text-xs text-amber-700 mt-1">Closer to 1 is better</p>
+            </div>
+
+            <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+              <h4 className="text-sm font-medium text-red-800 mb-1">Max Error</h4>
+              <p className="text-2xl font-bold text-red-600">
+                {metrics.max_error?.toFixed(4) || 'N/A'}
+              </p>
+              <p className="text-xs text-red-700 mt-1">Largest error</p>
+            </div>
+
+            <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+              <h4 className="text-sm font-medium text-indigo-800 mb-1">Mean Absolute % Error</h4>
+              <p className="text-2xl font-bold text-indigo-600">
+                {metrics.mape ? (metrics.mape * 100).toFixed(2) + '%' : 'N/A'}
+              </p>
+              <p className="text-xs text-indigo-700 mt-1">Percentage error</p>
             </div>
           </div>
         ) : (
@@ -171,7 +193,7 @@ function Result({
         <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
           <FiTrendingUp className="mr-2 text-purple-500" /> Model Insights
         </h3>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {visualization && (
             <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
@@ -199,7 +221,7 @@ function Result({
 
       {/* Processed Data */}
       {columns && rows && (
-        <div className="p-6">
+        <div className="p-6 border-b border-gray-200">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">Processed Data Sample</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -232,16 +254,58 @@ function Result({
         </div>
       )}
 
+      {/* Dashboard Section */}
+      {/* // In your Result component's return statement, update the Dashboard rendering: */}
+      {dashboard_metrics ? (
+        <Dashboard
+          metrics={metrics}
+          dashboardMetrics={dashboard_metrics}
+        />
+      ) : (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <FiAlertTriangle className="h-5 w-5 text-yellow-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                Dashboard data not available.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+ 
+ <div className="p-6 border-b border-gray-200">
+    <h3 className="text-xl font-semibold text-gray-800 mb-4">Data Analysis Dashboard</h3>
+    {/* {response.data_analysis_metrics ? (
+        <Dashboard2 dataAnalysis={response.data_analysis_metrics} />
+    ) : (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div className="flex">
+                <div className="flex-shrink-0">
+                    <FiAlertTriangle className="h-5 w-5 text-yellow-400" aria-hidden="true" />
+                </div>
+                <div className="ml-3">
+                    <p className="text-sm text-yellow-700">
+                        Data analysis metrics not available.
+                    </p>
+                </div>
+            </div>
+        </div>
+    )} */}
+</div>
+
       {/* Actions */}
       <div className="bg-gray-50 px-6 py-4 flex justify-between">
-       <button
-        onClick={handleDownload}
-        className="text-gray-600 hover:text-gray-800 font-medium flex items-center"
-      >
-        <FiDownload className="mr-2" />
-        Download Results
-      </button>
-        <button 
+        <button
+          onClick={handleDownload}
+          className="text-gray-600 hover:text-gray-800 font-medium flex items-center"
+        >
+          <FiDownload className="mr-2" />
+          Download Results
+        </button>
+        <button
           onClick={handleTryAnother}
           className="bg-yellow-600 hover:bg-orange-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200 flex items-center"
         >
