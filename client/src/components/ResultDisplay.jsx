@@ -276,9 +276,9 @@ function Result({
         </div>
       )}
  
- <div className="p-6 border-b border-gray-200">
+ {/* <div className="p-6 border-b border-gray-200">
     <h3 className="text-xl font-semibold text-gray-800 mb-4">Data Analysis Dashboard</h3>
-    {/* {response.data_analysis_metrics ? (
+    {response.data_analysis_metrics ? (
         <Dashboard2 dataAnalysis={response.data_analysis_metrics} />
     ) : (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
@@ -293,8 +293,8 @@ function Result({
                 </div>
             </div>
         </div>
-    )} */}
-</div>
+    )} 
+</div>*/}
 
       {/* Actions */}
       <div className="bg-gray-50 px-6 py-4 flex justify-between">
