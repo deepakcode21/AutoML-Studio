@@ -29,7 +29,7 @@ function Result({
       formData.append('splitRatio', splitRatio);
 
       try {
-        const res = await fetch('https://automl-studio-production-0873.up.railway.app/train', {
+        const res = await fetch('https://automl-studio.onrender.com/train', {
           method: 'POST',
           body: formData,
         });
