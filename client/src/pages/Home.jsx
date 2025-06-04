@@ -84,8 +84,9 @@ export default function Home() {
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
-              <button className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-400 hover:from-orange-700 hover:to-gray-700 text-white flex items-center justify-center">
-                Watch Demo
+              <button onClick={() => navigate("/clean")}
+               className="px-6 py-3 md:px-8 md:py-3 text-lg rounded-md bg-gradient-to-r from-yellow-600 to-gray-400 hover:from-orange-700 hover:to-gray-700 text-white flex items-center justify-center">
+                Get Data Clean
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
             </div>
